@@ -1,10 +1,19 @@
-const userModel = require("../models/userModel");
+const userService = require("../services/userService");
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await userModel.getAllUsers();
+    let { page, limit } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
 
-    res.json(users);
+    const { users, totalUsers } = await userService.getAllUsers(page, limit);
+
+    res.json({
+      users,
+      totalUsers,
+      page,
+      limit,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -13,7 +22,7 @@ const getAllUsers = async (req, res) => {
 const blockUser = async (req, res) => {
   const { id } = req.params;
   try {
-    await userModel.updateUserStatus(id, "blocked");
+    await userService.updateUserStatus(id, "blocked");
     res.json({ message: "User blocked" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -23,7 +32,7 @@ const blockUser = async (req, res) => {
 const unblockUser = async (req, res) => {
   const { id } = req.params;
   try {
-    await userModel.updateUserStatus(id, "active");
+    await userService.updateUserStatus(id, "active");
     res.json({ message: "User unblocked" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -39,7 +48,7 @@ const changeUserRole = async (req, res) => {
   }
 
   try {
-    await userModel.updateUserRole(id, role);
+    await userService.updateUserRole(id, role);
     res.json({ message: `User role updated to ${role}` });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -49,8 +58,24 @@ const changeUserRole = async (req, res) => {
 const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    await userModel.deleteUser(id);
+    await userService.deleteUser(id);
     res.json({ message: "User deleted" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const changeUserTheme = async (req, res) => {
+  const { id } = req.params;
+  const { theme } = req.body;
+
+  if (!["light", "dark"].includes(theme)) {
+    return res.status(400).json({ message: "Invalid theme provided." });
+  }
+
+  try {
+    await userService.updateUserTheme(id, theme);
+    res.json({ message: `User theme updated to ${theme}` });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -62,4 +87,5 @@ module.exports = {
   unblockUser,
   deleteUser,
   changeUserRole,
+  changeUserTheme,
 };

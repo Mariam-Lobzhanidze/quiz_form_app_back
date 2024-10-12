@@ -1,11 +1,9 @@
-// sync.js
-
 const sequelize = require("./config/sequelize");
-const User = require("./models/user");
+const User = require("./models/userModel");
 
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ force: true }); // Set force: true to drop the table if it exists
+    await sequelize.sync({ force: true });
     console.log("Database synchronized successfully.");
   } catch (error) {
     console.error("Error synchronizing the database:", error);

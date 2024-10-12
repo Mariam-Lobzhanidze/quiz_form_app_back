@@ -6,7 +6,8 @@ const {
   deleteUser,
   getAllUsers,
   changeUserRole,
-} = require("../controllers/usersController");
+  changeUserTheme,
+} = require("../controllers/userController");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -17,7 +18,7 @@ router.get("/users", authMiddleware, getAllUsers);
 router.put("/users/block/:id", authMiddleware, blockUser);
 router.put("/users/unblock/:id", authMiddleware, unblockUser);
 router.delete("/users/:id", authMiddleware, deleteUser);
-
-router.put("/users/:id", authMiddleware, changeUserRole);
+router.put("/users/role/:id", authMiddleware, changeUserRole);
+router.put("/users/theme/:id", authMiddleware, changeUserTheme);
 
 module.exports = router;

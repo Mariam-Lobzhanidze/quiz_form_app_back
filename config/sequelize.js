@@ -1,9 +1,6 @@
-// config/sequelize.js
-
 const { Sequelize } = require("sequelize");
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
 
-// Create a Sequelize instance using the database credentials from environment variables
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -14,7 +11,6 @@ const sequelize = new Sequelize(
   }
 );
 
-// Test the connection
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
