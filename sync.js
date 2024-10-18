@@ -1,5 +1,7 @@
 const sequelize = require("./config/sequelize");
 const User = require("./models/userModel");
+const Template = require("./models/templateModel");
+const Question = require("./models/questionModel");
 
 const syncDatabase = async () => {
   try {
