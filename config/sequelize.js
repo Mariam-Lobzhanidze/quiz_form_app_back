@@ -2,13 +2,12 @@ const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS.replace(/'/g, ""),
+  // process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  // host: process.env.DB_HOST,
+  // port: 6543,
+  process.env.DATABASE_URL,
   {
-    host: process.env.DB_HOST,
     dialect: "postgres",
-    port: 6543,
   }
 );
 
