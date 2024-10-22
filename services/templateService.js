@@ -2,14 +2,17 @@ const Template = require("../models/templateModel");
 const sequelize = require("../config/sequelize");
 const Question = require("../models/questionModel");
 
-const createTemplate = async (title, description, userId, questions) => {
+const createTemplate = async (id, title, description, userId, questions, imageUrl, imagePublicId) => {
   try {
     const result = await sequelize.transaction(async (t) => {
       const template = await Template.create(
         {
+          id,
           title,
           description,
           userId,
+          imageUrl,
+          imagePublicId,
         },
         { transaction: t }
       );
@@ -34,6 +37,7 @@ const createTemplate = async (title, description, userId, questions) => {
 
     return result;
   } catch (error) {
+    console.error("Error creating template:", error);
     throw error;
   }
 };

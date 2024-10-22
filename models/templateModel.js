@@ -21,6 +21,14 @@ const Template = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    imagePublicId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

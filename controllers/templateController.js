@@ -2,11 +2,20 @@ const templateService = require("../services/templateService");
 
 const createTemplate = async (req, res) => {
   try {
-    const { title, description, userId, questions } = req.body;
-    const template = await templateService.createTemplate(title, description, userId, questions);
+    const { id, title, description, userId, questions, imageUrl, imagePublicId } = req.body;
+    const template = await templateService.createTemplate(
+      id,
+      title,
+      description,
+      userId,
+      questions,
+      imageUrl,
+      imagePublicId
+    );
     res.status(201).json(template);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error in createTemplate endpoint:", error);
+    res.status(500).json({ message: error.message || "An error occurred." });
   }
 };
 
