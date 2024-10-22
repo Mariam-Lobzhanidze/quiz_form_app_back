@@ -9,7 +9,6 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     dialect: "postgres",
     port: 6543,
-    // dialect: "mysql",
   }
 );
 
