@@ -38,6 +38,20 @@ const getAllTemplates = async (req, res) => {
   }
 };
 
+const getUserTemplates = async (req, res) => {
+  const userId = req.params.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+    const { templates, totalTemplates } = await templateService.getTemplatesByUserId(userId, page, limit);
+    res.status(200).json({ templates, totalTemplates });
+  } catch (error) {
+    console.error("Error fetching user templates:", error);
+    res.status(500).json({ message: "Failed to fetch user templates" });
+  }
+};
+
 const updateTemplate = async (req, res) => {
   try {
     const { id } = req.params;
@@ -64,6 +78,7 @@ const deleteTemplate = async (req, res) => {
 module.exports = {
   createTemplate,
   getAllTemplates,
+  getUserTemplates,
   updateTemplate,
   deleteTemplate,
 };

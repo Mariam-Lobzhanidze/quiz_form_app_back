@@ -54,6 +54,20 @@ const getAllTemplates = async (page, limit) => {
   };
 };
 
+const getTemplatesByUserId = async (userId, page, limit) => {
+  const offset = (page - 1) * limit;
+  const templates = await Template.findAndCountAll({
+    where: { userId },
+    limit,
+    offset,
+  });
+
+  return {
+    templates: templates.rows,
+    totalTemplates: templates.count,
+  };
+};
+
 const updateTemplate = async (id, updates) => {
   try {
     const [updated] = await Template.update(updates, {
@@ -87,4 +101,5 @@ module.exports = {
   getAllTemplates,
   updateTemplate,
   deleteTemplate,
+  getTemplatesByUserId,
 };

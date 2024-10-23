@@ -1,15 +1,9 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
-const sequelize = new Sequelize(
-  // process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-  // host: process.env.DB_HOST,
-  // port: 6543,
-  process.env.DATABASE_URL,
-  {
-    dialect: "postgres",
-  }
-);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+});
 
 const testConnection = async () => {
   try {
@@ -23,3 +17,7 @@ const testConnection = async () => {
 testConnection();
 
 module.exports = sequelize;
+
+// process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+// host: process.env.DB_HOST,
+// port: 6543,

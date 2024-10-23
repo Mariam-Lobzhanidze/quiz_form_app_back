@@ -30,7 +30,8 @@ router.put("/users/theme/:id", authMiddleware, changeUserTheme);
 
 // Routes for templates
 router.post("/templates", authMiddleware, createTemplate);
-router.get("/templates", authMiddleware, getAllTemplates);
+router.get("/templates", getAllTemplates);
+router.get("/users/:userId/templates", getUserTemplates);
 router.put("/templates/:id", authMiddleware, updateTemplate);
 router.delete("/templates/:id", authMiddleware, deleteTemplate);
 
