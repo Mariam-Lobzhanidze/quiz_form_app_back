@@ -1,6 +1,7 @@
 const Template = require("../models/templateModel");
 const sequelize = require("../config/sequelize");
 const Question = require("../models/questionModel");
+const { Op } = require("sequelize");
 
 const createTemplate = async (id, title, description, userId, questions, imageUrl, imagePublicId) => {
   try {
@@ -104,7 +105,7 @@ const updateTemplate = async (id, updates) => {
         await Question.destroy({
           where: {
             templateId: id,
-            id: { [sequelize.Op.notIn]: questionIds },
+            id: { [Op.notIn]: questionIds },
           },
           transaction: t,
         });
@@ -125,7 +126,6 @@ const updateTemplate = async (id, updates) => {
     throw error;
   }
 };
-
 const deleteTemplate = async (id) => {
   try {
     const deleted = await Template.destroy({
