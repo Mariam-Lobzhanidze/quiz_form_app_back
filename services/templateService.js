@@ -56,7 +56,12 @@ const getAllTemplates = async (page, limit) => {
 
 const getTemplatesByUserId = async (userId, page, limit) => {
   const offset = (page - 1) * limit;
-  const templates = await Template.findAndCountAll({
+
+  const totalTemplates = await Template.count({
+    where: { userId },
+  });
+
+  const templates = await Template.findAll({
     where: { userId },
     limit,
     offset,
@@ -64,8 +69,8 @@ const getTemplatesByUserId = async (userId, page, limit) => {
   });
 
   return {
-    templates: templates.rows,
-    totalTemplates: templates.count,
+    templates,
+    totalTemplates,
   };
 };
 
