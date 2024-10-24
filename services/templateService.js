@@ -74,10 +74,12 @@ const getTemplatesByUserId = async (userId, page, limit) => {
   };
 };
 
-const updateTemplate = async (id, updates, questions) => {
+const updateTemplate = async (id, updates) => {
   try {
     const result = await sequelize.transaction(async (t) => {
-      const [updated] = await Template.update(updates, {
+      const { questions, ...templateUpdates } = updates;
+
+      const [updated] = await Template.update(templateUpdates, {
         where: { id },
         transaction: t,
       });
@@ -86,6 +88,8 @@ const updateTemplate = async (id, updates, questions) => {
       }
 
       if (questions && questions.length) {
+        const questionIds = questions.map((q) => q.id).filter(Boolean);
+
         for (const question of questions) {
           if (question.id) {
             await Question.update(question, {
@@ -97,7 +101,6 @@ const updateTemplate = async (id, updates, questions) => {
           }
         }
 
-        const questionIds = questions.map((q) => q.id).filter(Boolean);
         await Question.destroy({
           where: {
             templateId: id,
