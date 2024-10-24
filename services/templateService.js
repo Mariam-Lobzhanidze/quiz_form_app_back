@@ -94,7 +94,7 @@ const updateTemplate = async (id, updates) => {
         for (const question of questions) {
           if (question.id) {
             const existingQuestion = await Question.findOne({
-              where: { id: question.id },
+              where: { id: question.id, templateId: id },
               transaction: t,
             });
 
@@ -104,9 +104,10 @@ const updateTemplate = async (id, updates) => {
                 transaction: t,
               });
             } else {
-              question.id = generateNewUUID();
               await Question.create({ ...question, templateId: id }, { transaction: t });
             }
+          } else {
+            await Question.create({ ...question, templateId: id }, { transaction: t });
           }
         }
 
