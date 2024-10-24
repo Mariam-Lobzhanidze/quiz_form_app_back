@@ -60,6 +60,7 @@ const getTemplatesByUserId = async (userId, page, limit) => {
     where: { userId },
     limit,
     offset,
+    include: [{ model: Question, as: "questions" }],
   });
 
   return {
