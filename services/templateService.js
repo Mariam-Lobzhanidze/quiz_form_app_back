@@ -74,16 +74,51 @@ const getTemplatesByUserId = async (userId, page, limit) => {
   };
 };
 
-const updateTemplate = async (id, updates) => {
+const updateTemplate = async (id, updates, questions) => {
   try {
-    const [updated] = await Template.update(updates, {
-      where: { id },
+    const result = await sequelize.transaction(async (t) => {
+      const [updated] = await Template.update(updates, {
+        where: { id },
+        transaction: t,
+      });
+      if (!updated) {
+        throw new Error("Template not found");
+      }
+
+      if (questions && questions.length) {
+        for (const question of questions) {
+          if (question.id) {
+            await Question.update(question, {
+              where: { id: question.id, templateId: id },
+              transaction: t,
+            });
+          } else {
+            await Question.create({ ...question, templateId: id }, { transaction: t });
+          }
+        }
+
+        const questionIds = questions.map((q) => q.id).filter(Boolean);
+        await Question.destroy({
+          where: {
+            templateId: id,
+            id: { [sequelize.Op.notIn]: questionIds },
+          },
+          transaction: t,
+        });
+      }
+
+      const fullTemplate = await Template.findOne({
+        where: { id },
+        include: [{ model: Question, as: "questions" }],
+        transaction: t,
+      });
+
+      return fullTemplate;
     });
-    if (!updated) {
-      throw new Error("Template not found");
-    }
-    return updated;
+
+    return result;
   } catch (error) {
+    console.error("Error updating template:", error);
     throw error;
   }
 };
