@@ -96,10 +96,29 @@ const deleteTemplate = async (id) => {
   }
 };
 
+const getTemplateById = async (id) => {
+  try {
+    const template = await Template.findOne({
+      where: { id },
+      include: [{ model: Question, as: "questions" }],
+    });
+
+    if (!template) {
+      throw new Error("Template not found");
+    }
+
+    return template;
+  } catch (error) {
+    console.error("Error fetching template by ID:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createTemplate,
   getAllTemplates,
   updateTemplate,
   deleteTemplate,
   getTemplatesByUserId,
+  getTemplateById,
 };

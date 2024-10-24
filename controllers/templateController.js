@@ -75,10 +75,27 @@ const deleteTemplate = async (req, res) => {
   }
 };
 
+const getTemplateById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const template = await templateService.getTemplateById(id);
+
+    if (!template) {
+      return res.status(404).json({ message: "Template not found" });
+    }
+
+    res.status(200).json(template);
+  } catch (error) {
+    console.error("Error fetching template by ID:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createTemplate,
   getAllTemplates,
   getUserTemplates,
   updateTemplate,
   deleteTemplate,
+  getTemplateById,
 };

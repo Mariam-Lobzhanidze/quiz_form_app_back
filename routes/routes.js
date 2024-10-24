@@ -15,6 +15,7 @@ const {
   updateTemplate,
   deleteTemplate,
   getUserTemplates,
+  getTemplateById,
 } = require("../controllers/templateController");
 const router = express.Router();
 const authMiddleware = require("../middleware/authMiddleware");
@@ -33,6 +34,7 @@ router.put("/users/theme/:id", authMiddleware, changeUserTheme);
 router.post("/templates", authMiddleware, createTemplate);
 router.get("/templates", getAllTemplates);
 router.get("/users/:userId/templates", authMiddleware, getUserTemplates);
+router.get("/templates/:id", authMiddleware, getTemplateById);
 router.put("/templates/:id", authMiddleware, updateTemplate);
 router.delete("/templates/:id", authMiddleware, deleteTemplate);
 
