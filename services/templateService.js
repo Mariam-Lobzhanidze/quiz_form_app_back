@@ -106,8 +106,6 @@ const updateTemplate = async (id, updates) => {
             } else {
               await Question.create({ ...question, templateId: id }, { transaction: t });
             }
-          } else {
-            await Question.create({ ...question, templateId: id }, { transaction: t });
           }
         }
 
