@@ -93,12 +93,20 @@ const updateTemplate = async (id, updates) => {
 
         for (const question of questions) {
           if (question.id) {
-            await Question.update(question, {
-              where: { id: question.id, templateId: id },
+            const existingQuestion = await Question.findOne({
+              where: { id: question.id },
               transaction: t,
             });
-          } else {
-            await Question.create({ ...question, templateId: id }, { transaction: t });
+
+            if (existingQuestion) {
+              await Question.update(question, {
+                where: { id: question.id, templateId: id },
+                transaction: t,
+              });
+            } else {
+              question.id = generateNewUUID();
+              await Question.create({ ...question, templateId: id }, { transaction: t });
+            }
           }
         }
 
@@ -126,6 +134,7 @@ const updateTemplate = async (id, updates) => {
     throw error;
   }
 };
+
 const deleteTemplate = async (id) => {
   try {
     const deleted = await Template.destroy({
